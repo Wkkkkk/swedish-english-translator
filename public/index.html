@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swedish to English Translator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇸🇪 Swedish to English Translator 🇬🇧</h1>
+        </header>
+
+        <main>
+            <section class="translator-section">
+                <div class="input-area">
+                    <label for="swedish-text">Swedish Text:</label>
+                    <textarea
+                        id="swedish-text"
+                        placeholder="Enter Swedish text here..."
+                        rows="6"
+                    ></textarea>
+                </div>
+
+                <button id="translate-btn" class="btn-primary">Translate</button>
+
+                <div class="output-area">
+                    <label for="english-text">English Translation:</label>
+                    <textarea
+                        id="english-text"
+                        placeholder="Translation will appear here..."
+                        rows="6"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div id="error-message" class="error-message"></div>
+            </section>
+
+            <section class="history-section">
+                <div class="history-header">
+                    <h2>Translation History</h2>
+                    <button id="clear-history-btn" class="btn-secondary">Clear History</button>
+                </div>
+                <div id="history-list" class="history-list">
+                    <!-- History items will be inserted here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
