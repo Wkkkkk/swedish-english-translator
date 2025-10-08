@@ -3,11 +3,33 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs').promises;
+const fsSync = require('fs');
 const { Translate } = require('@google-cloud/translate').v2;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const HISTORY_FILE = 'translations-history.json';
+
+// Setup Google Cloud credentials from environment variable if provided
+async function setupCredentials() {
+  if (process.env.GOOGLE_CREDENTIALS_JSON) {
+    try {
+      const credPath = '/tmp/google-credentials.json';
+      fsSync.writeFileSync(credPath, process.env.GOOGLE_CREDENTIALS_JSON);
+      process.env.GOOGLE_APPLICATION_CREDENTIALS = credPath;
+      console.log('✓ Google credentials configured from environment variable');
+    } catch (error) {
+      console.error('Failed to setup credentials:', error);
+    }
+  } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    console.log('✓ Using GOOGLE_APPLICATION_CREDENTIALS:', process.env.GOOGLE_APPLICATION_CREDENTIALS);
+  } else {
+    console.warn('⚠ No Google credentials configured. Translation will not work.');
+  }
+}
+
+// Initialize credentials before starting
+setupCredentials();
 
 // Initialize Google Translate
 const translate = new Translate();
