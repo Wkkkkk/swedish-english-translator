@@ -21,8 +21,21 @@ async function setupCredentials() {
     } catch (error) {
       console.error('Failed to setup credentials:', error);
     }
+  } else if (process.env.GOOGLE_CREDENTIALS_BASE64) {
+    try {
+      const credPath = '/tmp/google-credentials.json';
+      const credJson = Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, 'base64').toString('utf-8');
+      fsSync.writeFileSync(credPath, credJson);
+      process.env.GOOGLE_APPLICATION_CREDENTIALS = credPath;
+      console.log('✓ Google credentials configured from base64 environment variable');
+    } catch (error) {
+      console.error('Failed to setup credentials from base64:', error);
+    }
   } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     console.log('✓ Using GOOGLE_APPLICATION_CREDENTIALS:', process.env.GOOGLE_APPLICATION_CREDENTIALS);
+  } else if (fsSync.existsSync('./google-credentials.json')) {
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = './google-credentials.json';
+    console.log('✓ Using local google-credentials.json file');
   } else {
     console.warn('⚠ No Google credentials configured. Translation will not work.');
   }
